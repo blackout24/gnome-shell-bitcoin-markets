@@ -1,4 +1,4 @@
-SCHEMA = org.gnome.shell.extensions.bitcoin-markets.gschema.xml
+SCHEMA = org.gnome.shell.extensions.ethereum-markets.gschema.xml
 
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always)
 
@@ -16,9 +16,9 @@ VENDOR = src/vendor/*.js
 
 TRANSLATION_SOURCE=$(wildcard src/*.po)
 
-ZIPFILE = gnome-shell-bitcoin-markets.zip
+ZIPFILE = gnome-shell-ethereum-markets.zip
 
-UUID = bitcoin-markets@ottoallmendinger.github.com
+UUID = ethereum-markets@blackout24.github.com
 EXTENSION_PATH = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 
 .PHONY: all schemas metadata
@@ -41,7 +41,7 @@ src/locale/%/LC_MESSAGES/bitcoin-markets.mo: src/%.po
 	mkdir -p $(dir $@)
 	msgfmt src/$*.po -o $@
 
-translations: $(TRANSLATION_SOURCE:src/%.po=src/locale/%/LC_MESSAGES/bitcoin-markets.mo)
+translations: $(TRANSLATION_SOURCE:src/%.po=src/locale/%/LC_MESSAGES/ethereum-markets.mo)
 
 src/schemas/gschemas.compiled: src/schemas/$(SCHEMA)
 	glib-compile-schemas src/schemas/
