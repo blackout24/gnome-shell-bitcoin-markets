@@ -45,8 +45,8 @@ const _Colors = {
 
 const _Defaults = [
   {
-    api: 'bitcoinaverage',
-    currency: 'USD',
+    api: 'kraken',
+    currency: 'XBT',
     attribute: 'last'
   }
 ];
