@@ -31,10 +31,10 @@ const getGnomeVersion = function () {
   return Config.PACKAGE_VERSION;
 };
 
-const _repository = "http://github.com/OttoAllmendinger/" +
-                    "gnome-shell-bitcoin-markets";
+const _repository = "http://github.com/blackout24/" +
+                    "gnome-shell-ethereum-markets";
 
-const _userAgent =  "gnome-shell-bitcoin-markets" +
+const _userAgent =  "gnome-shell-ethereum-markets" +
                     "/" + getExtensionVersion() +
                     "/Gnome" + getGnomeVersion() +
                     " (" + _repository + ")";
@@ -66,8 +66,7 @@ Soup.Session.prototype.add_feature.call(
 
 
 const DefaultCurrencies = [
-      'USD', 'EUR', 'CNY', 'GBP', 'CAD', 'RUB', 'AUD',
-      'BRL', 'CZK', 'JPY', 'NZD', 'SEK', 'SGD', 'PLN'
+      'USD', 'EUR', 'XBT'
 ];
 
 
@@ -162,8 +161,7 @@ const CurrencyRenderer = function ({unit, currency, decimals}) {
     const front = "%s%v";
     const back = "%v %s";
     const frontFormats = {
-      USD: front, CAD: front, AUD: front, GBP: front,
-      HKD: front, NZD: front, SGD: front, THB: front
+      USD: front, EUR: front, XBT: front
     };
 
     return frontFormats[currency] || back;
