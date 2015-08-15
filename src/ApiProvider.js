@@ -393,16 +393,16 @@ const BaseApi = new Lang.Class({
 
 
 
-const BitstampApi = new Lang.Class({
-  Name: 'BitstampApi',
+const KrakenApi = new Lang.Class({
+  Name: 'KrakenApi',
   Extends: BaseApi,
 
   // Quote 2013-08-09  ---  https://www.bitstamp.net/api/
   // `` Do not make more than 600 request per 10 minutes or we will ban your
   //  IP address. ''
-  apiName: "Bitstamp",
+  apiName: "Kraken",
 
-  currencies: ['USD'],
+  currencies: ['XBT'],
 
   interval: 10, // 60 requests per 10 minutes
 
@@ -421,214 +421,20 @@ const BitstampApi = new Lang.Class({
   },
 
   getLabel: function (options) {
-    return "BitStamp " + options.currency;
+    return "Kraken " + options.currency;
   },
 
   getUrl: function (options) {
-    return "https://www.bitstamp.net/api/ticker/";
+    return "https://api.kraken.com/0/public/Ticker";
   }
 });
-
-
-
-
-
-
-const BitcoinAverageApi = new Lang.Class({
-  Name: 'BitcoinAverageApi',
-  Extends: BaseApi,
-
-  apiName: "BitcoinAverage",
-
-  exchanges: Object.keys(getExchangeToCurrency()),
-
-  currencies: DefaultCurrencies,
-  /* quote https://bitcoinaverage.com/api.htm
-   *
-   * > API is updated along with the site, normally around every minute. There
-   * > is no explicit restriction about how often you can call the API, yet
-   * > calling it more often than once a minute makes no sense. Please be good.
-   */
-  interval: 60,
-
-  _invalidExchangeError: function () {
-    return new Error("use_average !== true and no exchange defined");
-  },
-
-  attributes: {
-    last: function (options) {
-      let renderCurrency = new CurrencyRenderer(options);
-      let renderChange = new ChangeRenderer();
-
-      let getNumber = function (data) {
-        if (options.use_average !== false) {
-          return data.last;
-        } else if (options.exchange !== undefined) {
-          return data[options.exchange].rates.last;
-        } else {
-          throw this._invalidExchangeError();
-        }
-      };
-
-      return {
-        text: function (data)
-          renderCurrency(getNumber(data)),
-
-        change: function (data)
-          renderChange(getNumber(data))
-      };
-    }
-  },
-
-  getUrl: function (options) {
-    if (options.use_average !== false) {
-      return "https://api.bitcoinaverage.com/ticker/" + options.currency;
-    } else if (options.exchange !== undefined) {
-      return "https://api.bitcoinaverage.com/exchanges/" + options.currency;
-    } else {
-      throw this._invalidExchangeError();
-    }
-  },
-
-  getLabel: function (options) {
-    if (options.use_average !== false) {
-      return "BitAvg " + options.currency;
-    } else if (options.exchange !== undefined) {
-      return "BitAvg " + options.currency + "@" + options.exchange;
-    } else {
-      throw this._invalidExchangeError();
-    }
-  }
-});
-
-
-const BitPayApi = new Lang.Class({
-  Name: 'BitPayApi',
-  Extends: BaseApi,
-
-  apiName: "BitPay",
-
-  currencies: DefaultCurrencies,
-
-  interval: 60, // unclear, should be safe
-
-  attributes: {
-    last: function (options) {
-      let renderCurrency = new CurrencyRenderer(options);
-      let renderChange = new ChangeRenderer();
-
-      let find = function (currency, arr) {
-        for (let {code, rate} of arr) {
-          if (code === currency) {
-            return rate;
-          }
-        }
-
-        throw Error("currency " + currency + " not found");
-      };
-
-      return {
-        text: function (data)
-          renderCurrency(find(options.currency, data)),
-        change: function (data)
-          renderChange(find(options.currency, data))
-      };
-    }
-  },
-
-  getLabel: function (options) {
-    return "BitPay " + options.currency;
-  },
-
-  getUrl: function (options) {
-    return "https://bitpay.com/api/rates";
-  }
-});
-
-
-
-const CoinbaseApi = new Lang.Class({
-  Name: 'CoinbaseApi',
-  Extends: BaseApi,
-
-  apiName: "Coinbase",
-
-  currencies: DefaultCurrencies,
-
-  interval: 60, // unclear, should be safe
-
-  attributes: {
-    last: function (options) {
-      let renderCurrency = new CurrencyRenderer(options);
-      let renderChange = new ChangeRenderer();
-
-      let key = 'btc_to_' + options.currency.toLowerCase();
-
-      return {
-        text: function (data)
-          renderCurrency(data[key]),
-        change: function (data)
-          renderChange(data[key])
-      };
-    }
-  },
-
-  getLabel: function (options) {
-    return "Coinbase " + options.currency;
-  },
-
-  getUrl: function (options) {
-    return "https://coinbase.com/api/v1/currencies/exchange_rates";
-  }
-});
-
-
-const BXinTHApi = new Lang.Class({
-  Name: 'BXinTHApi',
-  Extends: BaseApi,
-
-  apiName: "BX.in.th",
-
-  currencies: ['THB'],
-
-  interval: 60, // unclear, should be safe
-
-  attributes: {
-    last: function (options) {
-      let renderCurrency = new CurrencyRenderer(options);
-      let renderChange = new ChangeRenderer();
-
-      let key = 'last_price';
-
-      return {
-        text: function (data)
-          renderCurrency(data["1"]["last_price"]),
-        change: function (data)
-          renderChange(data["1"]["change"])
-      };
-    }
-  },
-
-  getLabel: function (options) {
-    return "BXinTH " + options.currency;
-  },
-
-  getUrl: function (options) {
-    return "https://bx.in.th/api/";
-  }
-});
-
 
 const ApiProvider = new Lang.Class({
   Name: "ApiProvider",
 
   _init: function () {
     this.apis = {
-      bitcoinaverage: new BitcoinAverageApi(),
-      bitstamp: new BitstampApi(),
-      bitpay: new BitPayApi(),
-      coinbase: new CoinbaseApi(),
-      bxinth: new BXinTHApi(),
+      kraken: new KrakenApi(),
     };
   },
 
