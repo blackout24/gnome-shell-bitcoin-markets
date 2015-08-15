@@ -1,10 +1,10 @@
 {
     "shell-version": ["3.14", "3.16"],
-    "uuid": "bitcoin-markets@ottoallmendinger.github.com",
-    "name": "Bitcoin Markets",
-    "url": "https://github.com/OttoAllmendinger/gnome-shell-bitcoin-markets/",
-    "description": "Display info on various Bitcoin exchanges. \n Tip address 1645A1qhW3FHxr2JLdqLuYGQ6QSmN5BbNS.",
-    "settings-schema":  "org.gnome.shell.extensions.bitcoin-markets",
-    "gettext-domain": "bitcoin-markets",
+    "uuid": "ethereum-markets@blackout24.github.com",
+    "name": "Ethereum Markets",
+    "url": "https://github.com/blackout24/gnome-shell-ethereum-markets/",
+    "description": "Display info on various Ethereum exchanges.",
+    "settings-schema":  "org.gnome.shell.extensions.ethereum-markets",
+    "gettext-domain": "ethereum-markets",
     "git-version": "_gitversion_"
 }
